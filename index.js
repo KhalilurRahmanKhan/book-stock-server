@@ -54,6 +54,29 @@ async function run(){
       });
 
 
+      app.put('/update/inventory/:id', async (req, res) => {
+        const id = req.params.id;
+
+        const filter = {_id:ObjectId(id)};
+
+        const options = {upsert:true};
+
+
+        const updateDoc = {$set:req.body}
+
+        
+        const result = await inventory.updateOne(filter,updateDoc,options);
+
+        res.send(result);
+      });
+
+
+
+     
+    
+  
+
+
 
      
 
