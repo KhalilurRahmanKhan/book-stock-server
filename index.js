@@ -28,10 +28,21 @@ async function run(){
 
 
 
-      app.get('/inventory', async (req, res) => {
+      app.get('/', async (req, res) => {
       const query = req.query;
 
       const cursor = inventory.find(query);
+
+      const result = await cursor.toArray();
+
+      res.send(result);
+      });
+
+
+      app.get('/inventory', async (req, res) => {
+      const query = req.query;
+
+      const cursor = inventory.find(query).limit(1);
 
       const result = await cursor.toArray();
 
@@ -83,9 +94,6 @@ async function run(){
       });
     
   
-
-
-
      
 
 
