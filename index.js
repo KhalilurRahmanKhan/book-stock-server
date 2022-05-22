@@ -3,7 +3,6 @@ const app = express();
 require('dotenv').config();
 const cors = require('cors');
 const { MongoClient, ServerApiVersion,ObjectId } = require('mongodb');
-const { isObjectIdOrHexString } = require('mongoose');
 
 
 const port = process.env.PORT || 5000 ;
@@ -30,8 +29,21 @@ async function run(){
 
       app.get('/', async (req, res) => {
       const query = req.query;
-
+      
       const cursor = inventory.find(query);
+      
+      const result = await cursor.toArray();
+
+      res.send(result);
+      });
+    
+
+
+
+      app.get('/inventory', async (req, res) => {
+      const query = req.query;
+
+      const cursor = inventory.find(query).limit(6);
 
       const result = await cursor.toArray();
 
@@ -39,14 +51,16 @@ async function run(){
       });
 
 
-      app.get('/inventory', async (req, res) => {
-      const query = req.query;
 
-      const cursor = inventory.find(query).limit(1);
+      app.get('/inventory/:id', async (req, res) => {
+      let id = req.params.id;
 
+      const cursor = inventory.find({_id:ObjectId(id)});
+
+      
       const result = await cursor.toArray();
 
-      res.send(result);
+      res.send(result[0]);
       });
 
 
